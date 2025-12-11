@@ -6,12 +6,13 @@
     --color-red: #D32F2F;        /* Rojo Botón */
     --color-purple: #7B1FA2;     /* Morado Botón */
     --color-white: #ffffff;
-    
+    --color-highlight: #FFD600; /* Amarillo vibrante */
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Open Sans', sans-serif;
     
     --header-height: 100px; /* Altura estimada */
 }
+
 
 /* RESET */
 * {
@@ -43,35 +44,33 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     z-index: 1000;
     padding: 15px 0;
-    border-bottom: 3px solid var(--color-petrol); /* Detalle en verde petroleo */
+    border-bottom: 3px solid var(--color-petrol);
 }
 
 .header-grid {
     display: grid;
-    /* Dos columnas: Izquierda (Logo/Menu) y Derecha (Contacto/Boton) */
+    /* Mantenemos tu Grid exacto */
     grid-template-columns: 1fr 1fr; 
-    /* Dos filas: Arriba y Abajo */
     grid-template-rows: auto auto; 
-    row-gap: 15px; /* Espacio entre la fila superior e inferior */
+    row-gap: 15px;
     align-items: center;
 }
 
-/* 1. Logo (Arriba Izquierda) */
+/* --- 1. LOGO (Tamaño Fijo) --- */
 .logo-area {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
 }
-.logo {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--color-brown);
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+
+/* Aquí forzamos el tamaño que pediste */
+.logo-area img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain; /* Asegura que el logo no se deforme */
+    display: block;
 }
 
-/* 2. Contacto (Arriba Derecha) */
+/* --- 2. CONTACTO --- */
 .contact-area {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
@@ -85,7 +84,7 @@ body {
     text-decoration: none;
 }
 
-/* 3. Menú (Abajo Izquierda - Debajo del Logo) */
+/* --- 3. MENÚ CON ANIMACIÓN (Aquí está el cambio) --- */
 .nav-area {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
@@ -93,21 +92,44 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 30px; /* Un poco más de espacio para la animación */
 }
+
 .nav-links a {
     text-decoration: none;
     color: var(--color-brown);
-    font-weight: 700;
+    font-weight: 600; /* Peso base */
     text-transform: uppercase;
     font-size: 0.95rem;
-    transition: color 0.3s;
-}
-.nav-links a:hover {
-    color: var(--color-petrol);
+    position: relative; /* Necesario para ubicar el subrayado */
+    transition: color 0.3s ease;
+    padding-bottom: 5px; /* Espacio para el subrayado */
 }
 
-/* 4. CTA Botón (Abajo Derecha - Debajo del Correo) */
+/* El Subrayado Animado (Pseudo-elemento) */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0; /* Empieza invisible (ancho 0) */
+    height: 3px; /* Grosor "negrita" del subrayado */
+    bottom: 0;
+    left: 0;
+    background-color: var(--color-petrol);
+    transition: width 0.3s ease-in-out; /* Animación suave */
+}
+
+/* Efecto Hover */
+.nav-links a:hover {
+    color: var(--color-petrol); /* Cambio de color texto */
+    /* Truco para "engrosar" la letra sin mover el diseño: text-shadow */
+    text-shadow: 0 0 1px var(--color-petrol); 
+}
+
+.nav-links a:hover::after {
+    width: 100%; /* El subrayado crece al 100% */
+}
+
+/* --- 4. CTA BOTÓN --- */
 .cta-area {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
@@ -132,46 +154,55 @@ body {
     color: white;
 }
 .btn-red:hover {
-    background-color: #b71c1c; /* Rojo más oscuro */
+    background-color: #b71c1c;
 }
 
-.btn-purple {
-    background-color: var(--color-purple);
-    color: white;
-}
-.btn-purple:hover {
-    background-color: #4a148c; /* Morado más oscuro */
+/* RESPONSIVE (Aseguramos que no se rompa en móvil) */
+@media (max-width: 768px) {
+    .header-grid {
+        /* En móvil suele ser mejor una sola fila o columna, 
+           pero respetando tu grid actual, ocultamos el menú para el hamburger */
+        display: flex; 
+        justify-content: space-between;
+        padding: 0 15px;
+    }
+    
+    /* Ocultamos elementos de escritorio en móvil si usas menú hamburguesa */
+    .contact-area, .nav-area, .cta-area {
+        display: none; 
+    }
+
+    .hamburger {
+        display: block; /* Asegúrate de tener estilos para el hamburger */
+    }
 }
 
 /* --- BANNER (HERO SECTION) --- */
 .hero-banner {
     position: relative;
-    height: 85vh; /* Altura del banner */
-    background-image: url('https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=1600&auto=format&fit=crop'); /* Imagen fondo de oficina/taller */
+    height: 85vh; 
+    background-image: url('img/banner1.PNG'); 
     background-size: cover;
     background-position: center;
     display: flex;
-    align-items: center; /* Centrado vertical */
+    align-items: center; 
+    /* CAMBIO: Alinea el contenido al inicio (izquierda) en lugar del centro */
+    justify-content: flex-start; 
 }
 
-/* Overlay Verde Petróleo sobre la imagen */
+/* CAMBIO: Ocultamos el overlay verde petróleo */
 .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--color-petrol);
-    opacity: 0.8; /* Transparencia para ver la imagen de fondo */
-    z-index: 1;
+    display: none; 
 }
 
 .hero-content {
     position: relative;
-    z-index: 2; /* Sobre el overlay */
+    z-index: 2;
     max-width: 700px;
-    /* Alineación izquierda como se pidió */
-    text-align: left; 
+    text-align: left;
+    /* CAMBIO: Margen izquierdo para separarlo del borde, pero manteniéndolo a la izquierda */
+    margin-left: 8%; 
+    padding-right: 20px; /* Para que no choque en pantallas pequeñas */
 }
 
 .hero-title {
@@ -179,8 +210,10 @@ body {
     font-size: 3.5rem;
     line-height: 1.1;
     font-weight: 800;
-    color: var(--color-cream); /* Crema para contraste sobre verde oscuro */
+    color: var(--color-cream);
     margin-bottom: 20px;
+    /* CAMBIO: Sombra negra fuerte para que el texto se lea sin el fondo verde */
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
 .hero-subtitle {
@@ -190,11 +223,101 @@ body {
     font-weight: 400;
     border-left: 4px solid var(--color-cream);
     padding-left: 15px;
+    /* CAMBIO: Sombra para legibilidad */
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.2); /* Fondo sutil opcional solo tras el texto */
+    padding-right: 10px; /* Espacio extra si usas el fondo sutil */
 }
 
 .hero-buttons {
     display: flex;
     gap: 15px;
+}
+
+/* --- ESTILOS DE LOS BOTONES --- */
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 5px;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    /* Sombra para que el botón resalte sobre la foto */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Botón Rojo */
+.btn-red {
+    background-color: var(--color-red, #D32F2F);
+    color: white;
+}
+
+.btn-red:hover {
+    background-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+}
+
+/* Botón Morado */
+.btn-purple {
+    background-color: var(--color-purple, #7B1FA2); 
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #4a148c;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(123, 31, 162, 0.4);
+}
+
+/* --- RESPONSIVIDAD (MOBILE) --- */
+@media (max-width: 900px) {
+    .hero-banner {
+        justify-content: center; /* En tablet/móvil se ve mejor centrado */
+        text-align: center;
+    }
+
+    .hero-content {
+        margin-left: 0; /* Quitamos el margen izquierdo forzado */
+        padding: 0 20px; /* Agregamos padding a ambos lados */
+        text-align: center; /* Centramos el texto en pantallas chicas */
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: 2.5rem; /* Texto más pequeño */
+    }
+    
+    .hero-subtitle {
+        border-left: none; /* Quitamos la línea lateral en móvil */
+        border-bottom: 3px solid var(--color-cream); /* La ponemos abajo */
+        padding-bottom: 10px;
+        padding-left: 0;
+        margin-left: auto;
+        margin-right: auto;
+        display: inline-block; /* Para que el borde se ajuste al texto */
+    }
+
+    .hero-buttons {
+        justify-content: center; /* Centrar botones */
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-buttons {
+        flex-direction: column; 
+        width: 100%;
+        gap: 10px;
+    }
+    .btn {
+        width: 100%; 
+    }
 }
 
 /* --- RESPONSIVIDAD (MÓVIL) --- */
@@ -207,14 +330,15 @@ body {
         padding: 10px 0;
     }
     
-    /* En móvil, simplificamos: Logo Izq, Menu hamburguesa Der */
+    /* Ocultamos elementos de escritorio */
     .contact-area, .cta-area {
-        display: none; /* Ocultamos contacto y botón rojo superior en móvil por espacio */
+        display: none; 
     }
     
+    /* MENÚ LATERAL */
     .nav-area {
         position: fixed;
-        top: 70px; /* Altura del header móvil */
+        top: 70px; 
         right: -100%;
         width: 70%;
         height: 100vh;
@@ -223,8 +347,9 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        transition: 0.3s;
+        transition: right 0.3s ease-in-out; /* Transición suave */
         box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        z-index: 1000;
     }
     
     .nav-links {
@@ -237,21 +362,933 @@ body {
         right: 0;
     }
 
+    /* BOTÓN HAMBURGUESA */
     .hamburger {
         display: block;
         grid-column: 2 / 3;
         grid-row: 1 / 2;
         cursor: pointer;
+        z-index: 1100; /* IMPORTANTE: Debe estar por encima del menú para poder dar clic en la X */
     }
+
     .hamburger span {
         display: block;
         width: 30px;
         height: 3px;
         background-color: var(--color-brown);
         margin: 5px 0;
+        /* Agregamos transición para que se mueva suavemente */
+        transition: all 0.3s ease-in-out;
     }
 
+    /* --- ANIMACIÓN DE LA X --- */
+    
+    /* Línea Superior: Baja y rota 45 grados */
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    /* Línea del Medio: Se vuelve invisible */
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    /* Línea Inferior: Sube y rota -45 grados */
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Ajustes extra para móvil */
     .hero-title { font-size: 2.5rem; }
     .hero-buttons { flex-direction: column; width: 100%; }
     .hero-buttons .btn { text-align: center; }
+}
+
+/* --- SECCIÓN DE CLIENTES --- */
+.clients-section {
+    background-color: var(--color-white);
+    padding: 60px 0;
+    border-bottom: 1px solid #eee;
+    overflow: hidden; /* Importante para que los logos no se salgan */
+}
+
+.clients-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+/* Estilos del Texto (Izquierda) */
+.clients-text {
+    flex: 1; /* Ocupa espacio disponible */
+    max-width: 40%;
+}
+
+.clients-text h2 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--color-brown);
+    line-height: 1.2;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+/* El estilo del resaltado amarillo */
+
+.highlight-yellow {
+    background-color: var(--color-highlight);
+    color: var(--color-brown); 
+    padding: 0 5px;
+    display: inline-block;
+}
+
+.clients-text p {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Estilos del Slider de Logos (Derecha) */
+.clients-logos-wrapper {
+    flex: 2; /* El slider ocupa más espacio */
+    overflow: hidden; /* Oculta lo que sale del contenedor */
+    position: relative;
+    /* Degradado a los lados para suavizar la entrada/salida */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logo-track {
+    display: flex;
+    width: calc(200px * 8); /* Ajustar según cantidad y ancho de logos */
+    animation: scroll 20s linear infinite;
+}
+
+.slide {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 50%; /* Mitad del track total */
+}
+
+.slide img {
+    width: 150px; /* Tamaño del logo */
+    height: auto;
+    padding: 0 15px;
+    filter: grayscale(100%); /* Logos en escala de grises para elegancia */
+    opacity: 0.7;
+    transition: all 0.3s;
+}
+
+.slide img:hover {
+    filter: grayscale(0%); /* Color al pasar el mouse */
+    opacity: 1;
+}
+
+/* Definición de la Animación */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Mueve la mitad del track (un set de logos) */
+    }
+}
+
+/* RESPONSIVE PARA CLIENTES */
+@media (max-width: 900px) {
+    .clients-container {
+        flex-direction: column; /* Texto arriba, logos abajo */
+        text-align: center;
+    }
+
+    .clients-text {
+        max-width: 100%;
+        margin-bottom: 30px;
+    }
+    
+    .logo-track {
+        width: calc(150px * 8); /* Ajuste para móvil */
+    }
+    
+    .slide img {
+        width: 120px;
+    }
+}
+
+/* --- SECCIÓN CATÁLOGOS --- */
+.catalog-section {
+    background-color: #F2F0E9; /* Un tono crema un poco más oscuro para diferenciar */
+    padding: 80px 0 100px 0; /* Padding inferior extra para el rombo */
+    position: relative; /* Necesario para posicionar el rombo */
+    text-align: center;
+}
+
+/* Título con subrayado verde */
+.catalog-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--color-brown);
+    margin-bottom: 50px;
+    position: relative;
+    display: inline-block;
+}
+
+.catalog-title::after {
+    content: '';
+    display: block;
+    width: 60px; /* Ancho del subrayado */
+    height: 4px; /* Grosor */
+    background-color: var(--color-petrol); /* Verde Petróleo */
+    margin: 10px auto 0; /* Centrado */
+    border-radius: 2px;
+}
+
+/* Grid de Cartas */
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    gap: 30px;
+}
+
+/* Diseño de la Carta Individual */
+.catalog-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animación "bouncy" suave */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Animación Hover de la Carta */
+.catalog-card:hover {
+    transform: translateY(-15px); /* Sube hacia arriba */
+    box-shadow: 0 15px 30px rgba(0,77,64,0.2); /* Sombra verdosa sutil */
+}
+
+/* Imagen y Overlay */
+.card-image-wrapper {
+    position: relative;
+    height: 250px; /* Altura fija para uniformidad */
+    overflow: hidden;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Efecto Zoom en imagen al hover */
+.catalog-card:hover .card-image-wrapper img {
+    transform: scale(1.1);
+}
+
+/* Overlay "VER PDF" */
+.hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 77, 64, 0.7); /* Verde Petróleo semitransparente */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    opacity: 0; /* Invisible por defecto */
+    transition: opacity 0.3s ease;
+}
+
+.catalog-card:hover .hover-overlay {
+    opacity: 1; /* Visible al hover */
+}
+
+/* Texto de la Carta */
+.catalog-card h3 {
+    padding: 20px;
+    font-size: 1.1rem;
+    color: var(--color-brown);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin: 0;
+    background-color: white;
+    border-top: 2px solid var(--color-cream);
+    transition: color 0.3s;
+}
+
+.catalog-card:hover h3 {
+    color: var(--color-petrol); /* Texto cambia a verde al hover */
+}
+
+/* --- ROMBO DE UNIÓN (Diamond Divider) --- */
+.diamond-divider {
+    position: absolute;
+    bottom: -15px; /* Se sale un poco de la sección para "unir" */
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg); /* Centrado y rotado */
+    width: 30px;
+    height: 30px;
+    background-color: var(--color-petrol); /* Color del rombo */
+    border: 4px solid white; /* Borde blanco para separarlo visualmente */
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* RESPONSIVE PARA CATÁLOGOS */
+@media (max-width: 1024px) {
+    .catalog-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+    }
+}
+
+@media (max-width: 600px) {
+    .catalog-grid {
+        grid-template-columns: 1fr; /* 1 columna en móvil */
+        gap: 40px;
+    }
+    
+    .catalog-title {
+        font-size: 2rem;
+    }
+}
+/* --- SECCIÓN TESTIMONIOS (FIX: Alineación y Contraste) --- */
+
+.testimonials-section {
+    background-color: #F2F0E9; /* Fondo Crema (El que tenías antes) */
+    padding: 80px 0;
+    text-align: center;
+    overflow: hidden; /* Evita que las sombras cortadas descuadren el ancho */
+}
+
+/* TÍTULOS */
+.section-header { margin-bottom: 60px; }
+.sub-heading { font-family: var(--font-body); font-size: 1.1rem; color: var(--color-brown); margin-bottom: 5px; }
+.main-heading { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: var(--color-brown); }
+
+/* CONTENEDOR DEL SLIDER */
+.testimonials-slider {
+    position: relative;
+    max-width: 1200px; /* Ancho máximo para que no se estire demasiado */
+    margin: 0 auto;
+}
+
+/* GRUPO DE DIAPOSITIVAS (SLIDE) */
+.testimonial-slide-group {
+    /* Estado Oculto (Default) */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centra las cartas */
+    gap: 30px; /* Espacio entre cartas */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out;
+    z-index: 1;
+}
+
+/* Estado Activo (Visible) */
+.testimonial-slide-group.active {
+    position: relative; /* Vuelve al flujo normal para dar altura */
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+}
+
+/* DISEÑO DE LA TARJETA (CARD) */
+.testimonial-card {
+    /* FIX DE ALINEACIÓN: Ancho fijo porcentual para asegurar 3 columnas exactas */
+    flex: 0 0 calc(33.333% - 20px); 
+    max-width: calc(33.333% - 20px);
+    
+    /* FIX DE CONTRASTE: Fondo Blanco Puro sobre el fondo Crema */
+    background-color: #ffffff; 
+    
+    padding: 40px 30px;
+    border-radius: 15px; /* Bordes más redondeados */
+    
+    /* SOMBRA FUERTE para que "flote" y resalte */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); 
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    border-bottom: 5px solid transparent; /* Borde inferior listo para hover */
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px); /* Sube más al pasar el mouse */
+    border-bottom-color: var(--color-petrol); /* Línea verde abajo al hover */
+}
+
+/* FOTO DEL CLIENTE */
+.client-photo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    /* Borde grueso blanco para separar la foto del fondo */
+    border: 4px solid #fff; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Sombra en la foto */
+    margin-bottom: 20px;
+    margin-top: -60px; /* EFECTO POP: La foto se sale un poco por arriba */
+    background-color: #fff;
+}
+.client-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* CITA Y TEXTOS */
+.client-quote {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444; /* Gris oscuro para lectura fácil */
+    font-style: italic;
+    margin-bottom: 20px;
+}
+.client-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-petrol);
+    margin-bottom: 5px;
+}
+.client-position {
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+}
+
+/* DOTS DE NAVEGACIÓN */
+.testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 50px;
+}
+.dot {
+    width: 12px; height: 12px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.dot.active {
+    background-color: var(--color-petrol);
+    transform: scale(1.3);
+}
+
+/* RESPONSIVE (MÓVIL Y TABLET) */
+@media (max-width: 1024px) {
+    .testimonial-slide-group .testimonial-card:nth-child(3) { display: none; } /* Oculta la 3ra en tablet */
+    .testimonial-card { flex: 0 0 calc(50% - 15px); max-width: calc(50% - 15px); } /* 2 columnas */
+}
+
+@media (max-width: 768px) {
+    .testimonial-slide-group { flex-direction: column; align-items: center; }
+    .testimonial-slide-group .testimonial-card:nth-child(2),
+    .testimonial-slide-group .testimonial-card:nth-child(3) { display: none; } /* Solo 1 carta en móvil */
+    .testimonial-card { 
+        flex: 0 0 100%; 
+        max-width: 90%; 
+        margin-top: 30px; /* Espacio extra por la foto que sobresale */
+    } 
+}
+
+/* --- FOOTER (Pie de Página) --- */
+.site-footer {
+    color: white;
+    font-family: var(--font-body);
+}
+
+/* Sección Principal (Fondo Verde Petróleo Oscuro) */
+.footer-main {
+    background-color: var(--color-petrol); /* Usa el color que definimos antes */
+    padding: 60px 0;
+    text-align: center;
+}
+
+/* Logo */
+.footer-logo-wrapper {
+    margin-bottom: 50px;
+}
+
+.footer-logo {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 2px;
+}
+
+/* Grid de 3 Columnas */
+.footer-columns {
+    display: flex;
+    justify-content: space-around; /* Distribuye espacio equitativamente */
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 250px; /* Para que no se aplasten en pantallas pequeñas */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* El Rombo Celeste */
+.icon-diamond {
+    width: 50px;
+    height: 50px;
+    background-color: #ffffff; /* Celeste Cian vibrante */
+    transform: rotate(45deg); /* Girar el cuadrado para hacerlo rombo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.footer-col:hover .icon-diamond {
+    transform: rotate(45deg) scale(1.1); /* Efecto zoom al hover */
+}
+
+/* Icono SVG dentro del Rombo */
+.icon-diamond svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--color-petrol); /* Icono color oscuro para contraste */
+    transform: rotate(-45deg); /* Girar el icono al revés para enderezarlo */
+}
+
+/* Títulos de las Columnas */
+.footer-col h3 {
+    font-family: var(--font-heading);
+    color: #FDFBF7; /* Crema claro */
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Texto de Información */
+.footer-col p {
+    color: #e0e0e0; /* Blanco grisáceo para lectura */
+    line-height: 1.6;
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+.footer-col a {
+    color: #c6dfe2; /* Enlaces en color celeste */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-col a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* --- CINTA INFERIOR (Copyright) --- */
+.footer-bottom {
+    background-color: #00332a; /* Un tono más oscuro que el verde petróleo */
+    padding: 20px 0;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between; /* Texto a la izquierda, Iconos a la derecha */
+    align-items: center;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255,255,255,0.1); /* Fondo sutil para icono */
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.social-icons a:hover {
+    background-color: #26C6DA; /* Hover celeste */
+    color: var(--color-petrol);
+    transform: translateY(-3px);
+}
+
+.social-icons svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* RESPONSIVE FOOTER */
+@media (max-width: 768px) {
+    .footer-columns {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .footer-bottom-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+/* --- WIDGET WHATSAPP --- */
+.whatsapp-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Alineación Izquierda como pediste */
+    z-index: 9999;
+    font-family: var(--font-body);
+}
+
+/* Botón Flotante */
+.whatsapp-float-btn {
+    width: 60px;
+    height: 60px;
+    background-color: #25D366; /* Verde Oficial WhatsApp */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    animation: pulse-green 2s infinite;
+}
+
+.whatsapp-float-btn:hover {
+    transform: scale(1.1);
+    background-color: #128C7E;
+}
+
+/* Animación de Pulso */
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+/* Ventana de Chat */
+.whatsapp-chat-window {
+    position: absolute;
+    bottom: 80px; /* Encima del botón */
+    left: 0;
+    width: 320px;
+    background-color: #FDFBF7; /* Crema (Marca) */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    
+    /* Animación de Entrada */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: bottom left;
+}
+
+/* Estado Activo (Abierto) */
+.whatsapp-chat-window.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Cabecera del Chat */
+.chat-header {
+    background-color: var(--color-petrol); /* Verde Petróleo (Marca) */
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.agent-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.agent-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.agent-text h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-family: var(--font-heading);
+}
+
+.agent-text p {
+    margin: 0;
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Cuerpo del Chat */
+.chat-body {
+    padding: 20px;
+    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Fondo patrón WhatsApp sutil */
+    background-color: #e5ddd5;
+    height: 200px;
+    overflow-y: auto;
+}
+
+.message-bubble {
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 10px 10px 10px 0;
+    font-size: 0.9rem;
+    color: #333;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    display: inline-block;
+    max-width: 85%;
+}
+
+/* Pie del Chat (Input) */
+.chat-footer {
+    padding: 10px;
+    background-color: #FDFBF7;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.chat-footer input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+    font-family: var(--font-body);
+}
+
+.send-btn {
+    background-color: var(--color-petrol);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.send-btn:hover {
+    background-color: #00332a;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .whatsapp-chat-window {
+        width: 280px; /* Un poco más pequeño en móviles estrechos */
+    }
+}
+
+/* --- MODAL DE COTIZACIÓN (POP-UP) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    z-index: 10000; /* Por encima de todo, incluso del header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Estado inicial: Oculto */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Estado Activo: Visible */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 600px; /* Ancho máximo */
+    max-height: 90vh; /* Para que no se salga de pantallas pequeñas */
+    overflow-y: auto; /* Scroll si el formulario es muy alto */
+    border-radius: 10px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    border-top: 5px solid var(--color-petrol); /* Detalle de marca */
+}
+
+.modal-overlay.active .modal-container {
+    transform: translateY(0);
+}
+
+/* Botón Cerrar (X) */
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s;
+}
+.modal-close:hover {
+    color: var(--color-red);
+}
+
+/* Encabezado del Modal */
+.modal-header h3 {
+    font-family: var(--font-heading);
+    color: var(--color-brown);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+.modal-header p {
+    font-family: var(--font-body);
+    color: #666;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* Estilos de los Inputs */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+.form-row .form-group {
+    flex: 1; /* Mitad y mitad */
+}
+
+label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--color-brown);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--color-petrol);
+}
+
+textarea {
+    resize: vertical; /* Permite estirar solo hacia abajo */
+}
+
+small {
+    display: block;
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+/* Botón de Enviar */
+.btn-submit-modal {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--color-petrol);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit-modal:hover {
+    background-color: #00332a; /* Tono más oscuro */
+}
+
+/* Responsive para el formulario */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .modal-container {
+        padding: 20px;
+    }
 }
